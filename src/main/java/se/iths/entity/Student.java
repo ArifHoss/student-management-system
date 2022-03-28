@@ -1,11 +1,10 @@
 package se.iths.entity;
 
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import javax.persistence.*;
+import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
+import java.util.regex.Pattern;
 
 @Entity
 public class Student {
@@ -17,6 +16,8 @@ public class Student {
     private String firstName;
     @Size(min = 2)
     private String lastName;
+    @Email
+    @Column(unique = true)
     private String email;
     private String phoneNumber;
 
@@ -68,5 +69,11 @@ public class Student {
 
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public static boolean checkEmail(String email, String regexPattern){
+        return Pattern.compile(regexPattern)
+                .matcher(email)
+                .matches();
     }
 }
