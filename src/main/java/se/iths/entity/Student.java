@@ -71,9 +71,21 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-    public static boolean checkEmail(String email, String regexPattern){
-        return Pattern.compile(regexPattern)
-                .matcher(email)
-                .matches();
+//    public static boolean checkEmail(String email, String regexPattern){
+//        return Pattern.compile(regexPattern)
+//                .matcher(email)
+//                .matches();
+//    }
+
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
+                ", lastName='" + lastName + '\'' +
+                ", email='" + email + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                '}';
     }
 }
