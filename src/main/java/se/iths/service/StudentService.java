@@ -18,6 +18,8 @@ public interface StudentService {
 
     List<Student> findByLastName(String lastName);
 
+    void deleteAStudent(Long id);
+
     List<Student> existByEmail();
 
     List<Student> existByLastName();

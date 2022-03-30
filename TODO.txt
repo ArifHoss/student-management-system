@@ -1,0 +1,19 @@
+JAVA EE / JAX-RS - Labb
+
+● CRUD-funktionalitet ska implementeras (Create, Read, Update, Delete).
+
+● Data om en student ska kunna hämtas med efternamn som en Query Parameter.
+  Det ska finnas möjlighet att ha flera studenter i databasen med samma
+  efternamn, och då returneras samtliga dessa.
+
+● När en ny student ska läggas till, är alla fält obligatoriska utom telefonnummer.
+
+● Fältet email måste vara unikt. Det vill säga att en email-address ska bara kunna
+  registreras en gång - om den redan existerar i databasen ska användaren
+  få ett felmeddelande.
+
+● Anropen ska returnera meningsfulla Response Codes.
+
+● Skapa minst en egen custom exception.
+
+● Felhantering ska finnas för varje CRUD-metod.

@@ -3,6 +3,7 @@ package se.iths.entity;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
@@ -11,8 +12,10 @@ public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
+    @NotNull
     @Size(min = 2)
     private String firstName;
+    @NotNull
     @Size(min = 2)
     private String lastName;
     @Email

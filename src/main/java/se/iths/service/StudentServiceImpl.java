@@ -64,6 +64,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public void deleteAStudent(Long id) {
+        Student student = entityManager.find(Student.class, id);
+        entityManager.remove(student);
+    }
+
+    @Override
     public List<Student> existByEmail() {
         return entityManager.createQuery("SELECT s.email FROM Student s", Student.class).getResultList();
 

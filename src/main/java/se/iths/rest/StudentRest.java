@@ -61,9 +61,25 @@ public class StudentRest {
     @Path("")
     public Response createAStudent(Student student) {
 
+
+        String firstName = student.getFirstName();
+        String lastName = student.getLastName();
         String email = student.getEmail();
         List<Student> existEmail = studentService.existByEmail();
 
+        if(firstName ==null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("FIRSTNAME_CANNOT_BE_NULL").build());
+        }
+        if(lastName ==null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("LASTNAME_CANNOT_BE_NULL").build());
+        }
+
+        if(email==null){
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("EMAIL_CANNOT_BE_NULL").build());
+        }
         if (existEmail.contains(email)) {
             throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
                     .entity("EMAIL_" + email + "_ALREADY_EXIST!TRY_WITH_ANOTHER_EMAIL").build());
@@ -98,4 +114,20 @@ public class StudentRest {
 
     }
 
+    @DELETE
+    @Path("/{id}")
+    public Response deleteAStudent(@PathParam("id")Long id){
+
+        Student student = studentService.getAStudentById(id);
+
+
+        if (student == null) {
+            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
+                    .entity("ID_'" + id + "'_IS_NOT_VALID_STUDENT_ID!PLEASE_TRY_WITH_VALID_ID!").build());
+        }
+
+
+        studentService.deleteAStudent(id);
+        return Response.ok("STUDENT_WITH_ID_"+id+"_DELETED").build();
+    }
 }
