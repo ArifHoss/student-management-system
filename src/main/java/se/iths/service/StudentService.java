@@ -1,71 +1,24 @@
 package se.iths.service;
 
-
 import se.iths.entity.Student;
 
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.transaction.Transactional;
 import java.util.List;
+import java.util.Map;
 
-@Transactional
-public class StudentService {
+public interface StudentService {
+    List<Student> getAllStudent();
 
-    @PersistenceContext
-    private EntityManager entityManager;
+    void createAStudent(Student student);
 
-    public List<Student> getAllStudent() {
+    Student getAStudentById(Long id);
 
-        List<Student> students = entityManager
-                .createQuery("select s from Student s", Student.class)
-                .getResultList();
+    void updateAllStudent(Student student);
 
-        return students;
-    }
+    Student updateStudentFields(Long id, Map<String, Object> fields);
 
-    public void createAStudent(Student student) {
-        entityManager.persist(student);
-    }
+    List<Student> findByLastName(String lastName);
 
-    public Student getAStudentById(Long id) {
-        return entityManager.find(Student.class, id);
-    }
+    List<Student> existByEmail();
 
-    public void updateAllStudent(Student student) {
-        entityManager.merge(student);
-    }
-
-    public Student updateStudentValue(Long id) {
-        Student student = entityManager.find(Student.class, id);
-
-        String firstName = student.getFirstName();
-        String lastName = student.getLastName();
-        String email = student.getEmail();
-        String phoneNumber = student.getPhoneNumber();
-
-        if (student.getFirstName().equals(firstName)) {
-            student.setFirstName(firstName);
-        }
-        if (student.getLastName().equals(lastName)) {
-            student.setLastName(lastName);
-        }
-        if (student.getEmail().equals(email)) {
-            student.setEmail(email);
-        }
-        if (student.getPhoneNumber().equals(phoneNumber)) {
-            student.setPhoneNumber(phoneNumber);
-        } else {
-            student.setFirstName(firstName);
-            student.setLastName(lastName);
-            student.setEmail(email);
-            student.setPhoneNumber(phoneNumber);
-        }
-        return student;
-    }
-
-    public Student updateFName(Long id, String firstName) {
-        Student student = entityManager.find(Student.class, id);
-        student.setFirstName(firstName);
-        return student;
-    }
+    List<Student> existByLastName();
 }

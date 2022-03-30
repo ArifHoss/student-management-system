@@ -4,7 +4,6 @@ package se.iths.entity;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.Size;
-import java.util.regex.Pattern;
 
 @Entity
 public class Student {
@@ -71,21 +70,4 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-//    public static boolean checkEmail(String email, String regexPattern){
-//        return Pattern.compile(regexPattern)
-//                .matcher(email)
-//                .matches();
-//    }
-
-
-    @Override
-    public String toString() {
-        return "Student{" +
-                "id=" + id +
-                ", firstName='" + firstName + '\'' +
-                ", lastName='" + lastName + '\'' +
-                ", email='" + email + '\'' +
-                ", phoneNumber='" + phoneNumber + '\'' +
-                '}';
-    }
 }
