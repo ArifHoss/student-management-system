@@ -53,3 +53,9 @@ PUT: UPDATE ALL STUDENT
 "email":"arif@gmail.com",
 "phoneNumber":"0763209865"
 }
+
+DELETE: DELETE A STUDENT
+http://localhost:8080/student-management-system/api/v1/student/{ID}
+
+*** Tar bort student med id. Om id existerar inte då får man 404 Not Found Exception och ett medelande
+"ID_'2'_IS_NOT_VALID_STUDENT_ID!PLEASE_TRY_WITH_VALID_ID!"
