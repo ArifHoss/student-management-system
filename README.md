@@ -1,3 +1,12 @@
+**
+Har skapat en StudentService interface för att förstaraka säkerhet 
+i method ändringar. Sedan har implementerat 
+CDI(Contexts and Dependency Injection) i StudentRest klassen genom att 
+använda @Inject annotation. 
+
+Just nu StudentDaoJpa gör ingenting. Tanken med det att utveckla vidare med säkerhet function. 
+**
+
 POST: CREATE A NEW STUDENT
 http://localhost:8080/student-management-system/api/v1/student
 
