@@ -81,6 +81,22 @@ public class StudentServiceImpl implements StudentService {
         return entityManager.createQuery("SELECT s.lastName FROM Student s", Student.class).getResultList();
     }
 
+    @Override
+    public Student updateStudentFirstName(Long id, String firstName) {
+        Student student = entityManager.find(Student.class, id);
+
+        if (student == null) {
+            throw new NotFoundExceptionHandler("ID '" + id + "'IS NOT VALID STUDENT ID! PLEASE TRY WITH VALID ID!");
+        }
+
+        if (firstName == null || firstName.isEmpty()){
+            throw new NotFoundExceptionHandler("STUDENT NAME CAN NOT BE NULL OR EMPTY!");
+        }
+        student.setFirstName(firstName);
+
+        return student;
+    }
+
     private void setStudentValue(Student student, String key, Object value) {
 
         String email = student.getEmail();

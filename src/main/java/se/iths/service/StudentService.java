@@ -23,4 +23,6 @@ public interface StudentService {
     List<Student> existByEmail();
 
     List<Student> existByLastName();
+
+    Student updateStudentFirstName(Long id, String name);
 }

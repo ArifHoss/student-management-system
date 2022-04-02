@@ -88,6 +88,14 @@ public class StudentRest {
 
     }
 
+    @PATCH
+    @Path("/firstname/{id}")
+    public Response updateStudentFirstName(@PathParam("id")Long id, Student student){
+        String firstName = student.getFirstName();
+        Student updateFirstName = studentService.updateStudentFirstName(id, firstName);
+        return Response.ok(updateFirstName).build();
+    }
+
     @DELETE
     @Path("/{id}")
     public Response deleteAStudent(@PathParam("id") Long id) {
@@ -107,14 +115,14 @@ public class StudentRest {
         List<Student> existEmail = studentService.existByEmail();
 
         if (firstName == null||firstName.isEmpty()) {
-            throw new NotFoundExceptionHandler("FIRSTNAME CANNOT BE NULL");
+            throw new NotFoundExceptionHandler("FIRSTNAME CANNOT BE NULL OR EMPTY");
         }
         if (lastName == null ||lastName.isEmpty()) {
-            throw new NotFoundExceptionHandler("LASTNAME CANNOT BE NULL");
+            throw new NotFoundExceptionHandler("LASTNAME CANNOT BE NULL OR EMPTY");
         }
 
         if (email == null||email.isEmpty()) {
-            throw new NotFoundExceptionHandler("EMAIL CANNOT BE NULL");
+            throw new NotFoundExceptionHandler("EMAIL CANNOT BE NULL OR EMPTY");
         }
         if (existEmail.contains(email)) {
             throw new ConflictExceptionHandler("EMAIL '" + email + "' ALREADY EXIST! TRY WITH ANOTHER EMAIL");
