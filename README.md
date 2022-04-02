@@ -43,6 +43,15 @@ http://localhost:8080/student-management-system/api/v1/student/lastName/{lastNam
 *** Hämta en student med efternamn. Om efternamn inte fins då får man 404 Not Found Exception och ett medelande
 "LASTNAME_Hossai_NOT_EXIST"
 
+
+PATCH: UPDATE STUDENT FIRST NAME
+http://localhost:8080/student-management-system/api/v1/student/firstname/{id}
+
+{
+"firstName":"Hossain"
+}
+I det här fallet, namn kan inte vara null eller tom! Exception handled
+
 PATCH: UPDATE ALL VALUE OR SPECIFIC VALUE
 http://localhost:8080/student-management-system/api/v1/student/value/{id}
 
