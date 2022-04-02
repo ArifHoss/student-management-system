@@ -2,6 +2,8 @@ package se.iths.service;
 
 
 import se.iths.entity.Student;
+import se.iths.exception.ConflictExceptionHandler;
+import se.iths.exception.NotFoundExceptionHandler;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
@@ -45,11 +47,10 @@ public class StudentServiceImpl implements StudentService {
     public Student updateStudentFields(Long id, Map<String, Object> fields) {
 
         Student student = entityManager.find(Student.class, id);
-        String email = student.getEmail();
 
         fields.forEach((key, value) -> {
 
-            setStudentValue(student, email, key, value);
+            setStudentValue(student, key, value);
         });
         return student;
     }
@@ -80,8 +81,12 @@ public class StudentServiceImpl implements StudentService {
         return entityManager.createQuery("SELECT s.lastName FROM Student s", Student.class).getResultList();
     }
 
-    private void setStudentValue(Student student, String email, String key, Object value) {
+    private void setStudentValue(Student student, String key, Object value) {
+
+        String email = student.getEmail();
+
         if (key.equals("firstName")) {
+
             student.setFirstName((String) value);
         }
         if (key.equals("lastName")) {
@@ -89,8 +94,9 @@ public class StudentServiceImpl implements StudentService {
         }
         if (key.equals("email")) {
             if (existByEmail().contains(value)) {
-                throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
-                        .entity("EMAIL_" + email + "_ALREADY_EXIST!TRY_WITH_ANOTHER_EMAIL").build());
+                throw new ConflictExceptionHandler("EMAIL '" + email + "' ALREADY EXIST! TRY WITH ANOTHER EMAIL");
+//                throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
+//                        .entity("EMAIL_" + email + "_ALREADY_EXIST!TRY_WITH_ANOTHER_EMAIL").build());
             }
             student.setEmail((String) value);
         }
@@ -104,4 +110,6 @@ public class StudentServiceImpl implements StudentService {
 //                case "phoneNumber" -> student.setPhoneNumber((String) value);
 //            }
     }
+
+
 }

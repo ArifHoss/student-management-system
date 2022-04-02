@@ -19,6 +19,7 @@ public class Student {
     @Size(min = 2)
     private String lastName;
     @Email
+    @NotNull
     @Column(unique = true)
     private String email;
     private String phoneNumber;

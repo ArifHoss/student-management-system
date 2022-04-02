@@ -1,13 +1,11 @@
 package se.iths.rest;
 
 import se.iths.entity.Student;
+import se.iths.exception.ConflictExceptionHandler;
+import se.iths.exception.NotFoundExceptionHandler;
 import se.iths.service.StudentService;
 
-import javax.enterprise.context.RequestScoped;
-import javax.faces.annotation.RequestMap;
 import javax.inject.Inject;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
@@ -29,31 +27,32 @@ public class StudentRest {
     @GET
     @Path("")
     public Response getAllStudent() {
+
         List<Student> students = studentService.getAllStudent();
+
         return Response.ok(students).build();
     }
-
 
     @GET
     @Path("{id}")
     public Response getStudentById(@PathParam("id") Long id) {
+
         Student student = studentService.getAStudentById(id);
-        if (student == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("ID_'" + id + "'_IS_NOT_VALID_STUDENT_ID!PLEASE_TRY_WITH_VALID_ID!").build());
-        }
+        checkIfStudentIdExist(id, student);
+
         return Response.ok(student).build();
     }
 
     @GET
     @Path("/lastName/{lastName}")
     public Response findStudentByLastName(@PathParam("lastName") String lastName) {
+
         List<Student> student = studentService.findByLastName(lastName);
         List<Student> existByLastName = studentService.existByLastName();
         if (!existByLastName.contains(lastName)) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("LASTNAME_" + lastName + "_NOT_EXIST").build());
+            throw new NotFoundExceptionHandler("LAST NAME '" + lastName + "' NOT EXIST IN STUDENT DATABASE! PLEASE WRITE CORRECT LASTNAME");
         }
+
         return Response.ok(student).build();
     }
 
@@ -61,29 +60,7 @@ public class StudentRest {
     @Path("")
     public Response createAStudent(Student student) {
 
-
-        String firstName = student.getFirstName();
-        String lastName = student.getLastName();
-        String email = student.getEmail();
-        List<Student> existEmail = studentService.existByEmail();
-
-        if(firstName ==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("FIRSTNAME_CANNOT_BE_NULL").build());
-        }
-        if(lastName ==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("LASTNAME_CANNOT_BE_NULL").build());
-        }
-
-        if(email==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("EMAIL_CANNOT_BE_NULL").build());
-        }
-        if (existEmail.contains(email)) {
-            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
-                    .entity("EMAIL_" + email + "_ALREADY_EXIST!TRY_WITH_ANOTHER_EMAIL").build());
-        }
+        checkStudentValue(student);
         studentService.createAStudent(student);
 
         return Response.ok(student).build();
@@ -92,44 +69,19 @@ public class StudentRest {
     @PUT
     @Path("")
     public Response updateAllStudent(Student student) {
-        String firstName = student.getFirstName();
-        String lastName = student.getLastName();
-        String email = student.getEmail();
-        List<Student> existEmail = studentService.existByEmail();
 
-        if(firstName ==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("FIRSTNAME_CANNOT_BE_NULL").build());
-        }
-        if(lastName ==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("LASTNAME_CANNOT_BE_NULL").build());
-        }
-
-        if(email==null){
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("EMAIL_CANNOT_BE_NULL").build());
-        }
-        if (existEmail.contains(email)) {
-            throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
-                    .entity("EMAIL_" + email + "_ALREADY_EXIST!TRY_WITH_ANOTHER_EMAIL").build());
-        }
+        checkStudentValue(student);
         studentService.updateAllStudent(student);
+
         return Response.ok(student).build();
     }
-
 
     @PATCH
     @Path("/value/{id}")
     public Response updateStudentFields(@PathParam("id") Long id, Map<String, Object> fields) {
 
         Student student = studentService.getAStudentById(id);
-
-        if (student == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("ID_'" + id + "'_IS_NOT_VALID_STUDENT_ID!PLEASE_TRY_WITH_VALID_ID!").build());
-        }
-
+        checkIfStudentIdExist(id, student);
         Student getStudentFields = studentService.updateStudentFields(id, fields);
 
         return Response.ok(getStudentFields).build();
@@ -138,18 +90,40 @@ public class StudentRest {
 
     @DELETE
     @Path("/{id}")
-    public Response deleteAStudent(@PathParam("id")Long id){
+    public Response deleteAStudent(@PathParam("id") Long id) {
 
         Student student = studentService.getAStudentById(id);
+        checkIfStudentIdExist(id, student);
+        studentService.deleteAStudent(id);
 
+        return Response.ok("STUDENT WITH ID '" + id + "' DELETED!").build();
+    }
 
-        if (student == null) {
-            throw new WebApplicationException(Response.status(Response.Status.NOT_FOUND)
-                    .entity("ID_'" + id + "'_IS_NOT_VALID_STUDENT_ID!PLEASE_TRY_WITH_VALID_ID!").build());
+    private void checkStudentValue(Student student) {
+
+        String firstName = student.getFirstName();
+        String lastName = student.getLastName();
+        String email = student.getEmail();
+        List<Student> existEmail = studentService.existByEmail();
+
+        if (firstName == null||firstName.isEmpty()) {
+            throw new NotFoundExceptionHandler("FIRSTNAME CANNOT BE NULL");
+        }
+        if (lastName == null ||lastName.isEmpty()) {
+            throw new NotFoundExceptionHandler("LASTNAME CANNOT BE NULL");
         }
 
+        if (email == null||email.isEmpty()) {
+            throw new NotFoundExceptionHandler("EMAIL CANNOT BE NULL");
+        }
+        if (existEmail.contains(email)) {
+            throw new ConflictExceptionHandler("EMAIL '" + email + "' ALREADY EXIST! TRY WITH ANOTHER EMAIL");
+        }
+    }
 
-        studentService.deleteAStudent(id);
-        return Response.ok("STUDENT_WITH_ID_"+id+"_DELETED").build();
+    private void checkIfStudentIdExist(Long id, Student student) {
+        if (student == null) {
+            throw new NotFoundExceptionHandler("ID '" + id + "'IS NOT VALID STUDENT ID! PLEASE TRY WITH VALID ID!");
+        }
     }
 }
