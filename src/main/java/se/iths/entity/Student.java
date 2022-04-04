@@ -6,6 +6,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Entity
 public class Student {
@@ -20,6 +21,7 @@ public class Student {
     @Email @NotNull @NotEmpty @Column(unique = true)
     private String email;
     private String phoneNumber;
+    private LocalDate createdDate;
 
     public Student() {
     }
@@ -29,6 +31,19 @@ public class Student {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    @PrePersist
+    public void getCurrentDate(){
+        setCreatedDate(LocalDate.now());
+    }
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Long getId() {

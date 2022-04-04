@@ -5,6 +5,7 @@ import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.time.LocalDate;
 
 @Entity
 public class Teacher {
@@ -12,18 +13,21 @@ public class Teacher {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Size(min = 2)
     private String firstName;
-    @NotNull @NotEmpty
+    @NotNull
+    @NotEmpty
     @Size(min = 2)
     private String lastName;
     @Email
-    @NotNull@NotEmpty
+    @NotNull
+    @NotEmpty
     @Column(unique = true)
     private String email;
     private String phoneNumber;
-
+    private LocalDate createdDate;
 
     public Teacher() {
     }
@@ -33,6 +37,19 @@ public class Teacher {
         this.lastName = lastName;
         this.email = email;
         this.phoneNumber = phoneNumber;
+    }
+
+    @PrePersist
+    public void getCurrentDate() {
+        setCreatedDate(LocalDate.now());
+    }
+
+    public LocalDate getCreatedDate() {
+        return createdDate;
+    }
+
+    public void setCreatedDate(LocalDate createdDate) {
+        this.createdDate = createdDate;
     }
 
     public Long getId() {
