@@ -1,4 +1,4 @@
-package se.iths.service;
+package se.iths.service.services;
 
 import se.iths.entity.Student;
 
@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface StudentService {
-    List<Student> getAllStudent();
+    List<Student> getAll();
 
     void createAStudent(Student student);
 

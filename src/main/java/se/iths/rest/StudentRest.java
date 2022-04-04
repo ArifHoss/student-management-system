@@ -3,7 +3,7 @@ package se.iths.rest;
 import se.iths.entity.Student;
 import se.iths.exception.ConflictExceptionHandler;
 import se.iths.exception.NotFoundExceptionHandler;
-import se.iths.service.StudentService;
+import se.iths.service.services.StudentService;
 
 import javax.inject.Inject;
 import javax.ws.rs.*;
@@ -28,7 +28,7 @@ public class StudentRest {
     @Path("")
     public Response getAllStudent() {
 
-        List<Student> students = studentService.getAllStudent();
+        List<Student> students = studentService.getAll();
 
         return Response.ok(students).build();
     }

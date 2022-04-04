@@ -1,14 +1,13 @@
-package se.iths.service;
+package se.iths.service.implementation;
 
 
 import se.iths.entity.Student;
 import se.iths.exception.ConflictExceptionHandler;
 import se.iths.exception.NotFoundExceptionHandler;
+import se.iths.service.services.StudentService;
 
 import javax.persistence.*;
 import javax.transaction.Transactional;
-import javax.ws.rs.WebApplicationException;
-import javax.ws.rs.core.Response;
 import java.util.List;
 import java.util.Map;
 
@@ -19,7 +18,7 @@ public class StudentServiceImpl implements StudentService {
     private EntityManager entityManager;
 
     @Override
-    public List<Student> getAllStudent() {
+    public List<Student> getAll() {
 
         return entityManager
                 .createQuery("select s from Student s", Student.class)
