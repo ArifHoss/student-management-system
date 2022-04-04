@@ -6,6 +6,8 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Teacher {
@@ -29,6 +31,9 @@ public class Teacher {
     private String phoneNumber;
     private LocalDate createdDate;
 
+    @OneToMany(cascade = CascadeType.MERGE,orphanRemoval = true)
+    private List<Subject> subjects = new ArrayList<>();
+
     public Teacher() {
     }
 
@@ -42,6 +47,14 @@ public class Teacher {
     @PrePersist
     public void getCurrentDate() {
         setCreatedDate(LocalDate.now());
+    }
+
+    public List<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(List<Subject> subjects) {
+        this.subjects = subjects;
     }
 
     public LocalDate getCreatedDate() {

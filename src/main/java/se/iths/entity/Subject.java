@@ -6,6 +6,8 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 public class Subject {
@@ -15,7 +17,13 @@ public class Subject {
     private Long id;
     @NotNull @NotEmpty @Size(min = 2)
     private String name;
-    private LocalDate createDate; // = LocalDate.from(LocalDateTime.now());
+    private LocalDate createDate;
+
+    @ManyToOne(cascade = CascadeType.MERGE)
+    private Teacher teacher;
+
+    @ManyToMany(cascade = CascadeType.MERGE)
+    private List<Student> students = new ArrayList<>();
 
     public Subject(String name) {
         this.name = name;
@@ -26,6 +34,14 @@ public class Subject {
     @PrePersist
     public void getCurrentDate(){
         setCreateDate(LocalDate.now());
+    }
+
+    public List<Student> getStudents() {
+        return students;
+    }
+
+    public void setStudents(List<Student> students) {
+        this.students = students;
     }
 
     public LocalDate getCreateDate() {
