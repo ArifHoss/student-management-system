@@ -1,6 +1,5 @@
 package se.iths.entity;
 
-
 import javax.persistence.*;
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotEmpty;
@@ -8,23 +7,28 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 
 @Entity
-public class Student {
+public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotNull @NotEmpty @Size(min = 2)
+    @NotNull @NotEmpty
+    @Size(min = 2)
     private String firstName;
-    @NotNull @NotEmpty @Size(min = 2)
+    @NotNull @NotEmpty
+    @Size(min = 2)
     private String lastName;
-    @Email @NotNull @NotEmpty @Column(unique = true)
+    @Email
+    @NotNull@NotEmpty
+    @Column(unique = true)
     private String email;
     private String phoneNumber;
 
-    public Student() {
+
+    public Teacher() {
     }
 
-    public Student(String firstName, String lastName, String email, String phoneNumber) {
+    public Teacher(String firstName, String lastName, String email, String phoneNumber) {
         this.firstName = firstName;
         this.lastName = lastName;
         this.email = email;
