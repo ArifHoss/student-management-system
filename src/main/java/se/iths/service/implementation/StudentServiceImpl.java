@@ -18,7 +18,7 @@ public class StudentServiceImpl implements StudentService {
     private EntityManager entityManager;
 
     @Override
-    public List<Student> getAll() {
+    public List<Student> getAllStudent() {
 
         return entityManager
                 .createQuery("select s from Student s", Student.class)
@@ -27,7 +27,6 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void createAStudent(Student student) {
-
         entityManager.persist(student);
 
     }

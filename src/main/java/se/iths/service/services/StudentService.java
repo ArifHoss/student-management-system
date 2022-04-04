@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 public interface StudentService {
-    List<Student> getAll();
+    List<Student> getAllStudent();
 
     void createAStudent(Student student);
 

@@ -28,7 +28,7 @@ public class StudentRest {
     @Path("")
     public Response getAllStudent() {
 
-        List<Student> students = studentService.getAll();
+        List<Student> students = studentService.getAllStudent();
 
         return Response.ok(students).build();
     }
