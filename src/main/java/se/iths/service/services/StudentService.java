@@ -6,11 +6,12 @@ import java.util.List;
 import java.util.Map;
 
 public interface StudentService {
+
     List<Student> getAllStudent();
 
-    void createAStudent(Student student);
-
     Student getAStudentById(Long id);
+
+    void createAStudent(Student student);
 
     void updateAllStudent(Student student);
 
@@ -25,4 +26,6 @@ public interface StudentService {
     List<Student> existByLastName();
 
     Student updateStudentFirstName(Long id, String name);
+
+    Student createNewStudentWithSubject(Long subjectid, Student student);
 }

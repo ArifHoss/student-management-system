@@ -6,33 +6,24 @@ import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
+import java.util.Set;
 
 @Entity
 public class Teacher {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @NotNull
-    @NotEmpty
-    @Size(min = 2)
+    private Long teacherId;
     private String firstName;
-    @NotNull
-    @NotEmpty
-    @Size(min = 2)
     private String lastName;
     @Email
-    @NotNull
-    @NotEmpty
-    @Column(unique = true)
     private String email;
     private String phoneNumber;
-    private LocalDate createdDate;
+    private LocalDate createdDate= LocalDate.now();
 
-    @OneToMany(cascade = CascadeType.MERGE,orphanRemoval = true)
-    private List<Subject> subjects = new ArrayList<>();
+    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<Subject> subjects = new HashSet<>();
 
     public Teacher() {
     }
@@ -44,16 +35,11 @@ public class Teacher {
         this.phoneNumber = phoneNumber;
     }
 
-    @PrePersist
-    public void getCurrentDate() {
-        setCreatedDate(LocalDate.now());
-    }
-
-    public List<Subject> getSubjects() {
+    public Set<Subject> getSubjects() {
         return subjects;
     }
 
-    public void setSubjects(List<Subject> subjects) {
+    public void setSubjects(Set<Subject> subjects) {
         this.subjects = subjects;
     }
 
@@ -61,16 +47,12 @@ public class Teacher {
         return createdDate;
     }
 
-    public void setCreatedDate(LocalDate createdDate) {
-        this.createdDate = createdDate;
+    public Long getTeacherId() {
+        return teacherId;
     }
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+    public void setTeacherId(Long teacherId) {
+        this.teacherId = teacherId;
     }
 
     public String getFirstName() {
@@ -104,5 +86,15 @@ public class Teacher {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
+
+    public void addSubject(Subject subject){
+         subjects.add(subject);
+    }
+
+    public void remove(Subject subject){
+        subjects.remove(subject);
+    }
+
 
 }

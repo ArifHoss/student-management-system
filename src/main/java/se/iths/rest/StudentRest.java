@@ -100,11 +100,16 @@ public class StudentRest {
     @Path("/{id}")
     public Response deleteAStudent(@PathParam("id") Long id) {
 
-        Student student = studentService.getAStudentById(id);
-        checkIfStudentIdExist(id, student);
         studentService.deleteAStudent(id);
 
-        return Response.ok("STUDENT WITH ID '" + id + "' DELETED!").build();
+        return Response.ok("STUDENT DELETED!").build();
+    }
+
+    @POST
+    @Path("/subject/{subjectid}")
+    public Response createNewStudentWithSubject(@PathParam("subjectid")Long subjectid, Student student){
+        Student newStudent = studentService.createNewStudentWithSubject(subjectid, student);
+        return Response.ok(newStudent).build();
     }
 
     private void checkStudentValue(Student student) {
@@ -120,13 +125,22 @@ public class StudentRest {
         if (lastName == null ||lastName.isEmpty()) {
             throw new NotFoundExceptionHandler("LASTNAME CANNOT BE NULL OR EMPTY");
         }
-
+        if (!isValidEmail(email)){
+            throw new NotFoundExceptionHandler("THIS '"+ email+"' IS INVALID EMAIL FORMAT! TRY WITH VALID EMAIL FORMAT!");
+        }
         if (email == null||email.isEmpty()) {
             throw new NotFoundExceptionHandler("EMAIL CANNOT BE NULL OR EMPTY");
         }
         if (existEmail.contains(email)) {
             throw new ConflictExceptionHandler("EMAIL '" + email + "' ALREADY EXIST! TRY WITH ANOTHER EMAIL");
         }
+    }
+
+    public boolean isValidEmail(String email) {
+
+        String regex = "^[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*@[_A-Za-z0-9-]+(\\.[_A-Za-z0-9-]+)*(\\.[_A-Za-z0-9-]+)";
+        return email.matches(regex);
+
     }
 
     private void checkIfStudentIdExist(Long id, Student student) {

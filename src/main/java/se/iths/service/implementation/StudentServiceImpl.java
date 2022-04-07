@@ -2,6 +2,7 @@ package se.iths.service.implementation;
 
 
 import se.iths.entity.Student;
+import se.iths.entity.Subject;
 import se.iths.exception.ConflictExceptionHandler;
 import se.iths.exception.NotFoundExceptionHandler;
 import se.iths.service.services.StudentService;
@@ -57,7 +58,8 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> findByLastName(String lastName) {
         String query = "SELECT s FROM Student s WHERE s.lastName =?1";
 
-        return entityManager.createQuery(query, Student.class)
+        return entityManager
+                .createQuery(query, Student.class)
                 .setParameter(1, lastName)
                 .getResultList();
     }
@@ -65,6 +67,7 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteAStudent(Long id) {
         Student student = entityManager.find(Student.class, id);
+        isStudentIdExist(id,student);
         entityManager.remove(student);
     }
 
@@ -83,15 +86,22 @@ public class StudentServiceImpl implements StudentService {
     public Student updateStudentFirstName(Long id, String firstName) {
         Student student = entityManager.find(Student.class, id);
 
-        if (student == null) {
-            throw new NotFoundExceptionHandler("ID '" + id + "'IS NOT VALID STUDENT ID! PLEASE TRY WITH VALID ID!");
-        }
+        isStudentIdExist(id, student);
 
-        if (firstName == null || firstName.isEmpty()){
+        if (firstName == null || firstName.isEmpty()) {
             throw new NotFoundExceptionHandler("STUDENT NAME CAN NOT BE NULL OR EMPTY!");
         }
         student.setFirstName(firstName);
 
+        return student;
+    }
+
+
+    @Override
+    public Student createNewStudentWithSubject(Long subjectid, Student student) {
+        Subject subject = entityManager.find(Subject.class, subjectid);
+        entityManager.persist(student);
+        student.getSubjects().add(subject);
         return student;
     }
 
@@ -117,12 +127,14 @@ public class StudentServiceImpl implements StudentService {
         if (key.equals("phoneNumber")) {
             student.setPhoneNumber((String) value);
         }
-//            switch (key) {
-//                case "firstName" -> student.setFirstName((String) value);
-//                case "lastName" -> student.setLastName((String) value);
-//                case "email" -> student.setEmail((String) value);
-//                case "phoneNumber" -> student.setPhoneNumber((String) value);
-//            }
+
+    }
+
+
+    private void isStudentIdExist(Long id, Student student) {
+        if (student == null) {
+            throw new NotFoundExceptionHandler("ID '" + id + "'IS NOT VALID STUDENT ID! PLEASE TRY WITH VALID ID!");
+        }
     }
 
 

@@ -8,25 +8,24 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class Student {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    @NotNull @NotEmpty @Size(min = 2)
+    private Long studentId;
     private String firstName;
-    @NotNull @NotEmpty @Size(min = 2)
     private String lastName;
-    @Email @NotNull @NotEmpty @Column(unique = true)
     private String email;
     private String phoneNumber;
-    private LocalDate createdDate;
+    private LocalDate createdDate = LocalDate.now();
 
-    @ManyToMany(cascade = CascadeType.MERGE)
-    private List<Subject> subjects = new ArrayList<>();
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    private Set<Subject> subjects = new HashSet<>();
 
     public Student() {
     }
@@ -38,20 +37,6 @@ public class Student {
         this.phoneNumber = phoneNumber;
     }
 
-
-    @PrePersist
-    public void getCurrentDate(){
-        setCreatedDate(LocalDate.now());
-    }
-
-    public List<Subject> getSubjects() {
-        return subjects;
-    }
-
-    public void setSubjects(List<Subject> subjects) {
-        this.subjects = subjects;
-    }
-
     public LocalDate getCreatedDate() {
         return createdDate;
     }
@@ -60,12 +45,12 @@ public class Student {
         this.createdDate = createdDate;
     }
 
-    public Long getId() {
-        return id;
+    public Long getStudentId() {
+        return studentId;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setStudentId(Long studentId) {
+        this.studentId = studentId;
     }
 
     public String getFirstName() {
@@ -96,8 +81,20 @@ public class Student {
         return phoneNumber;
     }
 
+    public Set<Subject> getSubjects() {
+        return subjects;
+    }
+
+    public void setSubjects(Set<Subject> subjects) {
+        this.subjects = subjects;
+    }
+
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
+    }
+
+    public void addSubject(Subject subject){
+        subjects.add(subject);
     }
 
 }
