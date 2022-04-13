@@ -17,6 +17,7 @@ public interface StudentService {
     Student updateStudentFields(Long id, Map<String, Object> fields);
 
     List<Student> findByLastName(String lastName);
+    List<Student> findByLastNameQuery(String lastName);
 
     void deleteAStudent(Long id);
 

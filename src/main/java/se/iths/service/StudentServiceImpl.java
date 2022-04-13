@@ -65,6 +65,12 @@ public class StudentServiceImpl implements StudentService {
     }
 
     @Override
+    public List<Student> findByLastNameQuery(String lastName) {
+        String query = "SELECT s FROM Student s WHERE s.lastName = :lastName";
+        return entityManager.createQuery(query, Student.class).setParameter("lastName", lastName).getResultList();
+    }
+
+    @Override
     public void deleteAStudent(Long id) {
         Student student = entityManager.find(Student.class, id);
         entityManager.remove(student);

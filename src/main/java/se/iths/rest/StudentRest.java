@@ -56,6 +56,19 @@ public class StudentRest {
         return Response.ok(student).build();
     }
 
+    @GET
+    @Path("/lastname")
+    public Response findStudentByLastNameQuery(@QueryParam("lastName") String lastName) {
+
+        List<Student> student = studentService.findByLastNameQuery(lastName);
+        List<Student> existByLastName = studentService.existByLastName();
+        if (!existByLastName.contains(lastName)) {
+            throw new NotFoundExceptionHandler("LAST NAME '" + lastName + "' NOT EXIST IN STUDENT DATABASE! PLEASE WRITE CORRECT LASTNAME");
+        }
+
+        return Response.ok(student).build();
+    }
+
     @POST
     @Path("")
     public Response createAStudent(Student student) {
