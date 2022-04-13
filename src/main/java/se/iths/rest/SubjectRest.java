@@ -3,9 +3,12 @@ package se.iths.rest;
 
 import se.iths.entity.Student;
 import se.iths.entity.Subject;
+import se.iths.entity.Teacher;
 import se.iths.exception.ConflictExceptionHandler;
 import se.iths.exception.NotFoundExceptionHandler;
+import se.iths.service.services.StudentService;
 import se.iths.service.services.SubjectService;
+import se.iths.service.services.TeacherService;
 
 import javax.annotation.Resource;
 import javax.inject.Inject;
@@ -20,10 +23,14 @@ import java.util.List;
 public class SubjectRest {
 
     private final SubjectService subjectService;
+    private final TeacherService teacherService;
+    private final StudentService studentService;
 
     @Inject
-    SubjectRest(SubjectService subjectService) {
+    SubjectRest(SubjectService subjectService, TeacherService teacherService, StudentService studentService) {
         this.subjectService = subjectService;
+        this.teacherService = teacherService;
+        this.studentService= studentService;
     }
 
     @GET
@@ -36,10 +43,8 @@ public class SubjectRest {
     @GET
     @Path("{id}")
     public Response getById(@PathParam("id") Long id) {
+        checkSubjectExist(id);
         Subject subject = subjectService.getSubjectById(id);
-        if (subject == null) {
-            throw new NotFoundExceptionHandler("SUBJECT WITH ID '" + id + "' DOES NOT FOUND!PLEASE TRY WITH A VALID ID");
-        }
         return Response.ok(subject).build();
     }
 
@@ -63,14 +68,16 @@ public class SubjectRest {
     @Path("/name/{id}")
     public Response updateName(@PathParam("id")Long id, Subject subject){
         checkSubjectName(subject);
+        checkSubjectExist(id);
         String getName = subject.getName();
-        subjectService.updateSubjectName(id, getName);
-        return Response.ok(subject).build();
+        List<Subject> subjectList = subjectService.updateSubjectName(id, getName);
+        return Response.ok(subjectList).build();
     }
 
     @DELETE
     @Path("{id}")
     public Response delete(@PathParam("id") Long id) {
+        checkSubjectExist(id);
         subjectService.delete(id);
         return Response.ok("SUBJECT HAS BEEN DELETED").build();
     }
@@ -81,8 +88,13 @@ public class SubjectRest {
             @PathParam("subjectid") Long subjectid,
             @PathParam("teacherid") Long teacherid) {
 
-        Subject subjectWithTeacher = subjectService.addExistingSubjectToExistingTeacher(subjectid, teacherid);
-        return Response.ok(subjectWithTeacher).build();
+        checkSubjectExist(subjectid);
+        Teacher teacher = teacherService.getATeacherById(teacherid);
+        if (teacher == null){
+            throw new NotFoundExceptionHandler("TEACHER WITH ID '" + teacherid + "' DOES NOT FOUND!PLEASE TRY WITH A VALID ID");
+        }
+        subjectService.addExistingSubjectToExistingTeacher(subjectid, teacherid);
+        return Response.ok("SUBJECT WITH ID '"+subjectid+"' ADDED TO TEACHER ID '"+teacherid).build();
     }
 
     @PUT
@@ -91,8 +103,21 @@ public class SubjectRest {
             @PathParam("subjectid") Long subjectid,
             @PathParam("studentid") Long studentid) {
 
-        Subject subjectList = subjectService.addExistingSubjectToExistingStudent(subjectid, studentid);
-        return Response.ok(subjectList).build();
+        checkSubjectExist(subjectid);
+        Student student = studentService.getAStudentById(studentid);
+        if (student == null){
+            throw new NotFoundExceptionHandler("STUDENT WITH ID '" + studentid + "' DOES NOT FOUND!PLEASE TRY WITH A VALID ID");
+        }
+
+        subjectService.addExistingSubjectToExistingStudent(subjectid, studentid);
+        return Response.ok("SUBJECT WITH ID '"+subjectid+"' ADDED TO STUDENT ID '"+studentid).build();
+    }
+
+    private void checkSubjectExist(Long id) {
+        Subject subject = subjectService.getSubjectById(id);
+        if (subject == null) {
+            throw new NotFoundExceptionHandler("SUBJECT WITH ID '" + id + "' DOES NOT FOUND!PLEASE TRY WITH A VALID ID");
+        }
     }
 
     private void checkSubjectName(Subject subject) {

@@ -1,10 +1,8 @@
 package se.iths.entity;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.Email;
-import javax.validation.constraints.NotEmpty;
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Size;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Set;
@@ -20,9 +18,10 @@ public class Teacher {
     @Email
     private String email;
     private String phoneNumber;
-    private LocalDate createdDate= LocalDate.now();
+    private LocalDate createdDate = LocalDate.now();
 
-    @OneToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @JsonbTransient
+    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
     private Set<Subject> subjects = new HashSet<>();
 
     public Teacher() {
@@ -88,13 +87,13 @@ public class Teacher {
     }
 
 
-    public void addSubject(Subject subject){
-         subjects.add(subject);
+    public void addSubjectToTeacher(Subject subject) {
+        subject.setTeacher(this);
+        subjects.add(subject);
     }
 
-    public void remove(Subject subject){
+    public void removeSubjectFromTeacher(Subject subject) {
         subjects.remove(subject);
     }
-
 
 }

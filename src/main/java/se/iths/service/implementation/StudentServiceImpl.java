@@ -22,7 +22,7 @@ public class StudentServiceImpl implements StudentService {
     public List<Student> getAllStudent() {
 
         return entityManager
-                .createQuery("select s from Student s", Student.class)
+                .createQuery("select s from Student s ", Student.class)
                 .getResultList();
     }
 
@@ -67,6 +67,11 @@ public class StudentServiceImpl implements StudentService {
     @Override
     public void deleteAStudent(Long id) {
         Student student = entityManager.find(Student.class, id);
+
+        for (Subject subject: student.getSubjects()){
+            student.removeSubjectFromStudent(subject);
+        }
+
         isStudentIdExist(id,student);
         entityManager.remove(student);
     }
@@ -119,8 +124,6 @@ public class StudentServiceImpl implements StudentService {
         if (key.equals("email")) {
             if (existByEmail().contains(value)) {
                 throw new ConflictExceptionHandler("EMAIL '" + email + "' ALREADY EXIST! TRY WITH ANOTHER EMAIL");
-//                throw new WebApplicationException(Response.status(Response.Status.CONFLICT)
-//                        .entity("EMAIL_" + email + "_ALREADY_EXIST!TRY_WITH_ANOTHER_EMAIL").build());
             }
             student.setEmail((String) value);
         }

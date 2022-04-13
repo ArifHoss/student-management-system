@@ -3,11 +3,10 @@ package se.iths.service.implementation;
 import se.iths.entity.Student;
 import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
+import se.iths.exception.ConflictExceptionHandler;
 import se.iths.exception.NotFoundExceptionHandler;
-import se.iths.service.services.StudentService;
 import se.iths.service.services.SubjectService;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
@@ -21,9 +20,7 @@ public class SubjectServiceImpl implements SubjectService {
     @Override
     public List<Subject> getAllSubject() {
 
-        return entityManager
-                .createQuery("SELECT s FROM Subject s", Subject.class)
-                .getResultList();
+        return entityManager.createQuery("SELECT s FROM Subject s ", Subject.class).getResultList();
     }
 
     @Override
@@ -43,16 +40,22 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public Subject updateSubjectName(Long id, String name) {
+    public List<Subject> updateSubjectName(Long id, String name) {
         Subject subject = entityManager.find(Subject.class, id);
         checkIfIdExist(id, subject);
         subject.setName(name);
-        return subject;
+        return entityManager.createQuery("SELECT s FROM Subject s", Subject.class).getResultList();
     }
 
     @Override
     public void delete(Long id) {
         Subject subject = entityManager.find(Subject.class, id);
+
+        for (Student student: subject.getStudents()){
+            student.removeSubjectFromStudent(subject);
+        }
+
+        subject.getTeacher().removeSubjectFromTeacher(subject);
         checkIfIdExist(id, subject);
         entityManager.remove(subject);
     }
@@ -62,10 +65,10 @@ public class SubjectServiceImpl implements SubjectService {
         Teacher teacher = entityManager.find(Teacher.class, teacherid);
         Subject subject = getSubjectById(subjectid);
 
-        subject.setTeacher(teacher);
-
-//        teacher.addSubject(subject);
-//        entityManager.persist(subject);
+        if (subject.getTeacher()!=null){
+            throw new ConflictExceptionHandler("THIS SUBJECT ALREADY HAVE A TEACHER!");
+        }
+        teacher.addSubjectToTeacher(subject);
         return subject;
     }
 
@@ -74,10 +77,7 @@ public class SubjectServiceImpl implements SubjectService {
         Student student = entityManager.find(Student.class, studentid);
         Subject subject = getSubjectById(subjectid);
 
-        subject.addStudent(student);
-
-//        student.addSubject(subject);
-//        entityManager.persist(subject);
+        student.addSubjectToStudent(subject);
         return subject;
     }
 
@@ -88,8 +88,8 @@ public class SubjectServiceImpl implements SubjectService {
 
 
     public void checkIfIdExist(Long id, Subject subject) {
-        if (subject == null){
-            throw new NotFoundExceptionHandler("SUBJECT WITH ID '"+ id +"' DOES NOT EXIST! TRY WITH VALID ID!");
+        if (subject == null) {
+            throw new NotFoundExceptionHandler("SUBJECT WITH ID '" + id + "' DOES NOT EXIST! TRY WITH VALID ID!");
         }
     }
 }

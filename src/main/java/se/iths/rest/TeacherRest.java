@@ -112,8 +112,6 @@ public class TeacherRest {
         return Response.ok(updatedTeacher).build();
     }
 
-
-
     @PATCH
     @Path("/email/{id}")
     public Response updateEmail(@PathParam("id")Long id, Teacher teacher){
@@ -127,8 +125,8 @@ public class TeacherRest {
 
     @DELETE
     @Path("/{id}")
-    public Response delete(@PathParam("id")Long id){
-        teacherService.delete(id);
+    public Response deleteTeacher(@PathParam("id")Long id){
+        teacherService.deleteTeacher(id);
         return Response.ok("TEACHER HAS BEEN DELETED").build();
     }
 

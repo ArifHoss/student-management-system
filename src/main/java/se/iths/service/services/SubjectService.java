@@ -15,7 +15,7 @@ public interface SubjectService {
 
     void updateAllSubject(Subject subject);
 
-    Subject updateSubjectName(Long id, String name);
+    List<Subject> updateSubjectName(Long id, String name);
 
     void delete(Long id);
 

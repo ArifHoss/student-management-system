@@ -21,7 +21,7 @@ public interface TeacherService {
 
     Teacher updateTeacherFirstName(Long id, String name);
 
-    void delete(Long id);
+    void deleteTeacher(Long id);
 
     void createNewTeacherWithSubject(Long subjectid, Teacher teacher);
 

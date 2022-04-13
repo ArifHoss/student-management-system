@@ -2,6 +2,7 @@ package se.iths.entity;
 
 import se.iths.exception.NotFoundExceptionHandler;
 
+import javax.json.bind.annotation.JsonbTransient;
 import javax.persistence.*;
 import javax.validation.constraints.NotEmpty;
 import javax.validation.constraints.NotNull;
@@ -21,10 +22,10 @@ public class Subject {
     private String name;
     private LocalDate createDate = LocalDate.now();
 
-    @ManyToOne(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Teacher teacher;
 
-    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
     private Set<Student> students = new HashSet<>();
 
     public Subject(String name) {
@@ -70,7 +71,6 @@ public class Subject {
         this.name = name;
     }
 
-    public void addStudent(Student student){
-        students.add(student);
-    }
+
+
 }

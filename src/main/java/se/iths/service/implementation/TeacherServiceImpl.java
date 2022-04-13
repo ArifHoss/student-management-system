@@ -1,9 +1,7 @@
 package se.iths.service.implementation;
 
-import se.iths.entity.Student;
 import se.iths.entity.Subject;
 import se.iths.entity.Teacher;
-import se.iths.exception.ConflictExceptionHandler;
 import se.iths.exception.NotFoundExceptionHandler;
 import se.iths.service.services.TeacherService;
 
@@ -12,7 +10,7 @@ import javax.persistence.PersistenceContext;
 import javax.transaction.Transactional;
 import java.util.List;
 import java.util.Map;
-import java.util.Objects;
+import java.util.Set;
 
 @Transactional
 public class TeacherServiceImpl implements TeacherService {
@@ -91,9 +89,15 @@ public class TeacherServiceImpl implements TeacherService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteTeacher(Long id) {
         Teacher teacher = entityManager.find(Teacher.class, id);
+
         checkIfTeacherIdExist(id, teacher);
+
+        for (Subject subject: teacher.getSubjects()){
+            teacher.removeSubjectFromTeacher(subject);
+        }
+
         entityManager.remove(teacher);
     }
 
@@ -104,7 +108,7 @@ public class TeacherServiceImpl implements TeacherService {
             throw new NotFoundExceptionHandler("SUBJECT WITH ID '" + subjectid + "' DOES NOT FOUND! TRY WITH VALID ID");
         }
         entityManager.persist(teacher);
-        teacher.addSubject(subject);
+        teacher.addSubjectToTeacher(subject);
     }
 
     @Override
