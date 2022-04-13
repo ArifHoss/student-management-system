@@ -10,7 +10,6 @@ import se.iths.service.services.StudentService;
 import se.iths.service.services.SubjectService;
 import se.iths.service.services.TeacherService;
 
-import javax.annotation.Resource;
 import javax.inject.Inject;
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -78,7 +77,7 @@ public class SubjectRest {
     @Path("{id}")
     public Response delete(@PathParam("id") Long id) {
         checkSubjectExist(id);
-        subjectService.delete(id);
+        subjectService.deleteASubject(id);
         return Response.ok("SUBJECT HAS BEEN DELETED").build();
     }
 

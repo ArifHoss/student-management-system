@@ -48,7 +48,7 @@ public class SubjectServiceImpl implements SubjectService {
     }
 
     @Override
-    public void delete(Long id) {
+    public void deleteASubject(Long id) {
         Subject subject = entityManager.find(Subject.class, id);
 
         for (Student student: subject.getStudents()){

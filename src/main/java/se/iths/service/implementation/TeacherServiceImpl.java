@@ -90,14 +90,14 @@ public class TeacherServiceImpl implements TeacherService {
 
     @Override
     public void deleteTeacher(Long id) {
+
         Teacher teacher = entityManager.find(Teacher.class, id);
 
-        checkIfTeacherIdExist(id, teacher);
-
         for (Subject subject: teacher.getSubjects()){
-            teacher.removeSubjectFromTeacher(subject);
+            subject.removeTeacherFromSubject(teacher);
         }
 
+        checkIfTeacherIdExist(id, teacher);
         entityManager.remove(teacher);
     }
 

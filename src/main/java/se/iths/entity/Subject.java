@@ -71,6 +71,18 @@ public class Subject {
         this.name = name;
     }
 
+    public void removeStudentFromSubject(Student student){
+        boolean remove = students.remove(student);
+        if (remove){
+            student.getSubjects().remove(this);
+        }
+    }
+
+    public void removeTeacherFromSubject(Teacher t){
+
+        teacher.getSubjects().remove(this);
+    }
+
 
 
 }

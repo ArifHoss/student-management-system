@@ -66,10 +66,11 @@ public class StudentServiceImpl implements StudentService {
 
     @Override
     public void deleteAStudent(Long id) {
+
         Student student = entityManager.find(Student.class, id);
 
         for (Subject subject: student.getSubjects()){
-            student.removeSubjectFromStudent(subject);
+            subject.removeStudentFromSubject(student);
         }
 
         isStudentIdExist(id,student);

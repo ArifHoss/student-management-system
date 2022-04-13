@@ -3,7 +3,6 @@ package se.iths.service.services;
 import se.iths.entity.Subject;
 
 import java.util.List;
-import java.util.Map;
 
 public interface SubjectService {
 
@@ -17,7 +16,7 @@ public interface SubjectService {
 
     List<Subject> updateSubjectName(Long id, String name);
 
-    void delete(Long id);
+    void deleteASubject(Long id);
 
     Subject addExistingSubjectToExistingTeacher(Long subjectid, Long teacherid);
 
