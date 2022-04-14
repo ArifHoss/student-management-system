@@ -21,7 +21,7 @@ public class Teacher {
     private LocalDate createdDate = LocalDate.now();
 
     @JsonbTransient
-    @OneToMany(cascade = CascadeType.MERGE, orphanRemoval = true)
+    @OneToMany(cascade = CascadeType.MERGE)
     private Set<Subject> subjects = new HashSet<>();
 
     public Teacher() {
