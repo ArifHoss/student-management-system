@@ -93,10 +93,8 @@ public class Teacher {
     }
 
     public void removeSubjectFromTeacher(Subject subject) {
-        boolean remove = subjects.remove(subject);
-        if (remove){
-            subject.getTeacher();
-        }
+        subjects.remove(subject);
+        subject.setTeacher(null);
     }
 
 }

@@ -93,10 +93,9 @@ public class TeacherServiceImpl implements TeacherService {
 
         Teacher teacher = entityManager.find(Teacher.class, id);
 
-        for (Subject subject: teacher.getSubjects()){
-            subject.removeTeacherFromSubject(teacher);
+        for (Subject subject : teacher.getSubjects()) {
+            teacher.removeSubjectFromTeacher(subject);
         }
-
         checkIfTeacherIdExist(id, teacher);
         entityManager.remove(teacher);
     }
