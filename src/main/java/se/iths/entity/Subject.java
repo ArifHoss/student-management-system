@@ -79,8 +79,7 @@ public class Subject {
     }
 
     public void removeTeacherFromSubject(Teacher t){
-
-        teacher.getSubjects().remove(this);
+       teacher.getSubjects().remove(t);
     }
 
 
