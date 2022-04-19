@@ -87,3 +87,28 @@ http://localhost:8080/student-management-system/api/v1/student/{ID}
 
 *** Tar bort student med id. Om id existerar inte då får man 404 Not Found Exception och ett medelande
 "ID_'2'_IS_NOT_VALID_STUDENT_ID!PLEASE_TRY_WITH_VALID_ID!"
+
+
+GET :	/student-management-system/api/v1/teacher
+POST :	/student-management-system/api/v1/teacher
+GET :	/student-management-system/api/v1/teacher/lastName/{lastName}
+POST :	/student-management-system/api/v1/teacher/subject/{subjectid}
+DELETE :/student-management-system/api/v1/teacher/{id}
+GET :	/student-management-system/api/v1/teacher/{id}
+PATCH :/student-management-system/api/v1/teacher/firstname/{id}
+PUT :	/student-management-system/api/v1/teacher/updateall
+PATCH :/student-management-system/api/v1/teacher/value/{id}
+PATCH :/student-management-system/api/v1/teacher/email/{id}
+PATCH :/student-management-system/api/v1/teacher/update/{id}
+
+
+GET :	/student-management-system/api/v1/subject
+PATCH :/student-management-system/api/v1/subject/name/{id}
+POST :	/student-management-system/api/v1/subject
+PUT :	/student-management-system/api/v1/subject
+PUT :	/student-management-system/api/v1/subject/{subjectid}/teacher/{teacherid}
+PUT :	/student-management-system/api/v1/subject/{subjectid}/student/{studentid}
+DELETE :/student-management-system/api/v1/subject/{id}
+GET :	/student-management-system/api/v1/subject/{id}	
+
+
