@@ -124,7 +124,7 @@ public class TeacherRest {
     }
 
     @DELETE
-    @Path("/remove/{id}")
+    @Path("/{id}")
     public Response deleteTeacher(@PathParam("id")Long id){
         teacherService.deleteTeacher(id);
         return Response.ok("TEACHER HAS BEEN DELETED").build();
