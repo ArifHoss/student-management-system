@@ -7,6 +7,7 @@ import javax.ws.rs.core.Response;
 public class ConflictExceptionHandler extends WebApplicationException {
 
     public ConflictExceptionHandler(String message){
-        super(Response.status(Response.Status.CONFLICT).entity(message).type(MediaType.TEXT_PLAIN_TYPE).build());
+        super(Response.status(Response.Status.CONFLICT)
+                .entity(new ErrorMessage(message)).type(MediaType.TEXT_PLAIN_TYPE).build());
     }
 }

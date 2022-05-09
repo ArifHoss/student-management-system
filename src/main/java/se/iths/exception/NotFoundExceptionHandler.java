@@ -9,7 +9,8 @@ import javax.ws.rs.ext.Provider;
 public class NotFoundExceptionHandler extends WebApplicationException {
 
     public NotFoundExceptionHandler(String message) {
-         super(Response.status(Response.Status.NOT_FOUND).entity(message).type(MediaType.TEXT_PLAIN_TYPE).build());
+         super(Response.status(Response.Status.NOT_FOUND)
+                 .entity(new ErrorMessage(message)).type(MediaType.APPLICATION_JSON).build());
 
     }
 }
